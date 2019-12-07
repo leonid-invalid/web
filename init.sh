@@ -6,7 +6,9 @@ sudo ln -s /usr/bin/python3.5 /usr/bin/python3
 sudo python3 -m pip install gunicorn
 sudo python3 -m pip install django==2.0
 sudo python3 -m pip install mysqlclient
-sudo python3 -m pip install django-autofixture
+sudo rm /etc/nginx/sites-available/default
+sudo rm /etc/nginx/sites-enabled/test.conf
+sudo ln -s /home/box/web/etc/nginx.conf /etc/nginx/sites-enabled/test.conf
 sudo /etc/init.d/mysql start
 sudo mysql -uroot -e "create database stepik;"
 sudo mysql -uroot -e "CREATE USER 'leonid'@'localhost' IDENTIFIED BY 'lomtik5455'";

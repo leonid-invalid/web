@@ -13,7 +13,7 @@ sudo /etc/init.d/mysql start
 sudo mysql -uroot -e "create database stepik;"
 sudo mysql -uroot -e "CREATE USER 'leonid'@'localhost' IDENTIFIED BY 'lomtik5455';"
 sudo mysql -uroot -e "grant all privileges on stepik.* to 'leonid'@'localhost' with grant option;"
-python3 ~/web/ask/manage.py makemigrations
+python3 ~/web/ask/manage.py migrate
 sudo /etc/init.d/nginx restart
 cd ~/web/ask
 gunicorn -b 0.0.0.0:8000 ask.wsgi:application

@@ -10,13 +10,10 @@ def test(request, *args, **kwargs):
 @require_GET
 def question_details(request, id):
 	question = get_object_or_404(Question, id=id)
-	try:
-		answer=Answer.objects.filter(question=question)
-	except Answer.DoesNotExist:
-		answer=None
+	answers=Answer.objects.filter(question=question)
 	return render(request, 'question_details.html', {
 		'question': question,
-		'answer': answer,
+		'answers': answers,
 })
 
 @require_GET

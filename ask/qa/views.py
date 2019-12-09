@@ -9,16 +9,16 @@ def test(request, *args, **kwargs):
 	return HttpResponse('OK')
 
 def question_details(request, id):
+	question = get_object_or_404(Question, id=id)
+	answers = Answer.objects.filter(question=question)
 	if request.method == "POST":
 		form = AnswerForm(request.POST)
 		if form.is_valid():
+			form.clean()
 			form.save()
-			
 			url = '/question/' + str(id) + '/'
 			return HttpResponseRedirect(url)
 	else:
-		question = get_object_or_404(Question, id=id)
-		answers=Answer.objects.filter(question=question)
 		form = AnswerForm(initial={'question': question.id})
 	return render(request, 'question_details.html', {
 		'question': question,

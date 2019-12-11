@@ -9,11 +9,9 @@ class AskForm(forms.Form):
 	def clean(self):
 		return self.cleaned_data 
 
-	def save(self):
-		self.cleaned_data['author'] = User.objects.get(pk=1)
-		ask = Question.objects.create(**self.cleaned_data)
-		ask.save()
-		return ask
+	def save(self, user):
+		q = Question.objects.create(**self.cleaned_data, author=user)
+		return q.id
 
 class AnswerForm(forms.Form):
 	text = forms.CharField(widget=forms.Textarea)
@@ -22,10 +20,7 @@ class AnswerForm(forms.Form):
 	def clean(self):
 		return self.cleaned_data 
 
-	def save(self):
-		self.cleaned_data['author'] = User.objects.get(pk=1)
+	def save(self, user):
 		q = self.cleaned_data['question']
 		self.cleaned_data['question'] = Question.objects.get(pk=int(q))
-		answer = Answer.objects.create(**self.cleaned_data)
-		answer.save()
-		return answer
+		return Answer.objects.create(**self.cleaned_data, author=user)

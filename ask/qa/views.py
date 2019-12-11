@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from qa.models import Question, Answer
 from django.core.paginator import Paginator
 from qa.forms import AskForm, AnswerForm
+from datetime import timedelta
 
 def test(request, *args, **kwargs):
 	return HttpResponse('OK')
@@ -13,9 +14,8 @@ def question_details(request, id):
 	answers = Answer.objects.filter(question=question)
 	if request.method == "POST":
 		form = AnswerForm(request.POST)
-		if form.is_valid():
-			form.clean()
-			form.save()
+		if form.is_valid(): 
+			form.save(request.user)
 			url = '/question/' + str(id) + '/'
 			return HttpResponseRedirect(url)
 	else:
@@ -58,20 +58,10 @@ def ask(request):
 	if request.method == "POST":
 		form = AskForm(request.POST)
 		if form.is_valid():
-			question = form.save()
-			url = '/question/' + str(question.id) + '/'
+			q = form.save(request.user)
+			url = '/question/' + str(q) + '/'
 			return HttpResponseRedirect(url)
 	else:
 		form = AskForm()
 	return render(request, 'AskAnswerForms.html', {'form': form})
 
-#def answer(request):
-#	if request.method == "POST":
-#		form = AnswerForm(request.POST)
-#		if form.is_valid():
-#			answer = form.save()
-#			url = answer.get_url()
-#			return HttpResponseRedirect(url)
-#	else:
-#		form = AnswerForm()
-#	return render(request, 'AskAnswerForms.html', {'form': form})
